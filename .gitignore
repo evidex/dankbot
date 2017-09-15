@@ -15,3 +15,6 @@ __pycache__/
 # Crap
 .DS_Store
 logs/
+
+# Test files
+*.json
