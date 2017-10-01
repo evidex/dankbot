@@ -65,6 +65,8 @@ if __name__ == '__main__':
 
     assert len(km) != 0
 
+
     for key in km.keys():
         if isinstance(km[key], dict):
             assert type(km[key]) == collections.defaultdict
+    print(km)
