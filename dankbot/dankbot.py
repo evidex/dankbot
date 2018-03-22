@@ -12,8 +12,10 @@ class Dankbot:
         done = False
         while not done:
             km = self.kb.fetch_killmail()
-            for endpoint in self.endpoints:
-                endpoint.post_km(km)
+            km = filter_km(km, config)
+            if km:
+                for endpoint in self.endpoints:
+                    endpoint.post_km(km)
         # Tidy up exit out here
 
 if __name__ == '__main__':

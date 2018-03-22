@@ -29,7 +29,9 @@ class zKill():
         return package
 
     def parse_killdata(self, payload):
-        return dict_to_default_dict(lambda: '', payload)
+        """ Do any parsing of the killmail, if required
+        """
+        return payload
 
     def fetch_killmail(self):
         """ Poll the zKillboard API for a new kill until one exists.
@@ -45,7 +47,12 @@ class zKill():
     def is_solo_kill(self, km):
         """ Returns True if a kill is considered a 'solo' kill
         """
-        pass
+        return km['zkb']['solo']
+
+    def is_awox_kill(self, km):
+        """ Returns True if a kill is considered a 'awox' kill
+        """
+        return km['zkb']['awox']
 
     def is_super_kill(self, km):
         """ Returns True if a kill is considered a 'super' kill
@@ -64,9 +71,6 @@ if __name__ == '__main__':
     km = kb.fetch_killmail()
 
     assert len(km) != 0
-
-
-    for key in km.keys():
-        if isinstance(km[key], dict):
-            assert type(km[key]) == collections.defaultdict
-    print(km)
+    print(type(km))
+    print(type(kb.parse_killdata(km)))
+    print(km['zkb'])
