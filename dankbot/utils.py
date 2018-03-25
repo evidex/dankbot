@@ -8,6 +8,8 @@ import logging
 import sys
 import collections
 
+import esipy
+
 def setup_logging(name, verbose, debug):
     pass
 
@@ -21,3 +23,12 @@ def dict_to_default_dict(factory, data):
     for key in data.keys():
         result[key] = dict_to_default_dict(factory, data[key])
     return result
+
+class esi():
+    """ Trivial wrapper around the esipy module
+    """
+
+    ESI_SWAGGER_URI="https://esi.tech.ccp.is/latest/swagger.json?datasource=tranquility"
+    def __init__(self, app, client):
+        self.app = esipy.App(url=ESI_SWAGGER_URI)
+        self.client = esipy.EsiClient(retry_requests=True)

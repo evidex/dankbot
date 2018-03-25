@@ -1,18 +1,22 @@
 import json
+from pprint import pprint
 import time
 import requests
 import sys
 import collections
 
-from utils import *
+import utils
+
 
 REDIS_URL = 'https://redisq.zkillboard.com/listen.php'
 POLL_DELAY = 0.5 # Time in seconds to wait between calls to zKillboard RedisQ
 
 class zKill():
+    """ zKillboard interface class
+    """
 
     def __init__(self, verbose=True, debug=False):
-        self.log = setup_logging(__name__, verbose, debug)
+        self.log = utils.setup_logging(__name__, verbose, debug)
         self.session = requests.Session()
 
     def check_queue(self):
@@ -33,8 +37,8 @@ class zKill():
         """
         return payload
 
-    def fetch_killmail(self):
-        """ Poll the zKillboard API for a new kill until one exists.
+    def fetch_killdata(self):
+        """ Poll the zKillboard API for a new kills until one exists.
         """
         km = None
         while not km:
@@ -64,13 +68,20 @@ class zKill():
         """
         pass
 
+    def get_raw_killmail(self, killmail_url):
+        """ Return the full killmail data from the ESI endpoint
+        """
+        return self.session.get(killmail_url).json()
 
 
 if __name__ == '__main__':
+    """
+        Interactive testing
+    """
+
     kb = zKill()
-    km = kb.fetch_killmail()
+    km = kb.fetch_killdata()
 
     assert len(km) != 0
-    print(type(km))
-    print(type(kb.parse_killdata(km)))
     print(km['zkb'])
+    pprint(kb.get_raw_killmail(km['zkb']['href']))
